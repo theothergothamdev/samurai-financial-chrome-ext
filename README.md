@@ -32,7 +32,7 @@ Community based Chrome extension for small tweaks to the Samurai Financial websi
 
 ## Maintainance
 
-This was a quick project for myself and I have no intention of continously maintainance.
+This was a quick project for myself and I have no intention of maintaining it in the future.
 
 ## Contributing
 
