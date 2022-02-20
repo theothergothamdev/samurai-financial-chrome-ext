@@ -37,3 +37,11 @@ This was a quick project for myself and I have no intention of continously maint
 ## Contributing
 
 ¯\\\_(ツ)\_/¯
+
+## Donating
+
+Feel like buying me a beer? 🍻
+
+> 0xd2d4D33F7539bE8f0f03E748Cb8B1eEB307ce75
+
+![Account QR](donate.png)
