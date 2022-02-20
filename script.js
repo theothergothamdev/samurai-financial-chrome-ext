@@ -65,10 +65,15 @@ function addLoadingSection() {
   poll();
 }
 
-function addRewardsCycleSection(connectedWallet, claimDate) {
+function addRewardsCycleSection(connectedWallet, walletMetaData) {
+  const claimDate = walletMetaData ? walletMetaData.claimDate : null;
   let _claimDate = claimDate;
 
   const renderSummary = lastClaimDate => {
+    if (!lastClaimDate) {
+      return `No data found for connected wallet.`;
+    }
+
     const nextClaimDate = new Date(lastClaimDate);
 
     while (nextClaimDate.getTime() <= new Date().getTime()) {
@@ -78,26 +83,26 @@ function addRewardsCycleSection(connectedWallet, claimDate) {
     const timeDiff = getDiff(nextClaimDate, new Date());
 
     return `
-      <div id="lastClaimDate" class="text-14 text-gray">Last claim date: ${lastClaimDate.toLocaleString()}</div>
-      <div id="lastClaimDate" class="text-14 text-gray">Next claim date: ${nextClaimDate.toLocaleString()}</div>
-      <div id="nextClaimCycle" class="text-14 text-gray">Claim cycle ends: ${timeDiff}</div>
-    `;
+       <div id="lastClaimDate" class="text-14 text-gray">Last claim date: ${lastClaimDate.toLocaleString()}</div>
+       <div id="lastClaimDate" class="text-14 text-gray">Next claim date: ${nextClaimDate.toLocaleString()}</div>
+       <div id="nextClaimCycle" class="text-14 text-gray">Claim cycle ends: ${timeDiff}</div>
+     `;
   };
 
   const section = document.createElement('section');
   section.id = 'rewards-cycle-section';
   section.className = 'stat-box flex flex-col justify-center items-start w-full p-20 md:p-30 rounded-md mt-3rem';
   section.innerHTML = `
-    <div class="text-18 md:text-20 font-bold">Next Rewards</div>
-    <div class="flex w-full">
-      <div id="rewards-cycle-summary" style="flex: 1">
-        ${renderSummary(_claimDate)}
-      </div>
-      <div>
-        <button id="resetTimer" class="btn-transparent px-10 mx-10 bg-gray-light rounded-md py-2 text-14">Reset timer</button>
-      </div>
-    </div>
-  `;
+     <div class="text-18 md:text-20 font-bold">Next Rewards</div>
+     <div class="flex w-full">
+       <div id="rewards-cycle-summary" style="flex: 1">
+         ${renderSummary(_claimDate)}
+       </div>
+       <div>
+         <button id="resetTimer" class="btn-transparent px-10 mx-10 bg-gray-light rounded-md py-2 text-14">Reset timer</button>
+       </div>
+     </div>
+   `;
 
   // Add to dom
   const insertPoint = document.getElementById('node-creator');
@@ -121,6 +126,6 @@ function addRewardsCycleSection(connectedWallet, claimDate) {
 addLoadingSection();
 chrome.storage.sync.get('walletMeta', ({ walletMeta }) => {
   const connectedWallet = getConnectedWallet();
-  const { claimDate } = walletMeta[connectedWallet];
-  addRewardsCycleSection(connectedWallet, new Date(claimDate));
+  const walletMetaData = walletMeta[connectedWallet];
+  addRewardsCycleSection(connectedWallet, walletMetaData);
 });
