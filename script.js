@@ -66,11 +66,11 @@ function addLoadingSection() {
 }
 
 function addRewardsCycleSection(connectedWallet, walletMetaData) {
-  const claimDate = walletMetaData ? walletMetaData.claimDate : null;
+  const claimDate = walletMetaData ? new Date(walletMetaData.claimDate) : null;
   let _claimDate = claimDate;
 
   const renderSummary = lastClaimDate => {
-    if (!lastClaimDate) {
+    if (!walletMetaData) {
       return `No data found for connected wallet.`;
     }
 
