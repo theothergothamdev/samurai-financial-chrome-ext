@@ -70,7 +70,7 @@ function addRewardsCycleSection(connectedWallet, walletMetaData) {
   let _claimDate = claimDate;
 
   const renderSummary = lastClaimDate => {
-    if (!walletMetaData) {
+    if (!_claimDate) {
       return `No data found for connected wallet.`;
     }
 
@@ -109,11 +109,19 @@ function addRewardsCycleSection(connectedWallet, walletMetaData) {
   insertPoint.parentNode.insertBefore(section, insertPoint);
 
   // Add event handlers
-  document.getElementById('resetTimer').onclick = function () {
+  const btnResetTime = document.getElementById('resetTimer');
+  if (!walletMetaData) {
+    btnResetTime.innerText = 'Set Timer';
+  }
+  btnResetTime.onclick = function () {
     _claimDate = new Date();
     chrome.storage.sync.set({ [connectedWallet]: { claimDate: _claimDate.toISOString() } });
 
     document.getElementById('rewards-cycle-summary').innerHTML = renderSummary(_claimDate);
+
+    if (!walletMetaData) {
+      btnResetTime.innerText = 'Update Timer';
+    }
   };
 
   // Start timers
@@ -123,9 +131,9 @@ function addRewardsCycleSection(connectedWallet, walletMetaData) {
 }
 
 // Initial load
-addLoadingSection();
 chrome.storage.sync.get('walletMeta', ({ walletMeta }) => {
   const connectedWallet = getConnectedWallet();
   const walletMetaData = walletMeta[connectedWallet];
   addRewardsCycleSection(connectedWallet, walletMetaData);
+  addLoadingSection();
 });
